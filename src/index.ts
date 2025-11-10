@@ -7,8 +7,8 @@ dotenv.config()
 const app = express() 
 const port = process.env.PORT || 3000 
 
-app.use(express.json()) //For parsing JSON bodies
-app.use(express.urlencoded({extended: true})) //For parsing URL-encoded form data
+app.use(express.json()) //For parsing JSON bodies (application/json)
+app.use(express.urlencoded({extended: true})) //For parsing URL-encoded form data (x-www-form-urlencoded)
 app.use(express.static('public'))
 app.set('views', 'views') 
 
