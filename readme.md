@@ -1,6 +1,6 @@
 ### Notes
-I recently learned of the modular (feature-based) architecture for structuring my codebase. 
-It taskes the form: 
+I recently learned of the modular (feature-based) architecture. I will use it to structure my codebase. 
+It takes the form: 
 ```
 /src
  ├── modules
