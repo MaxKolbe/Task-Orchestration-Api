@@ -2,7 +2,7 @@ import type { Request, Response } from "express"
 
 // type Todo = Array<{id: number, task: string, isDone: boolean}>
 interface Todo  {id: number, task: string, isDone: boolean}
-const todos: Todo[] = [//test the behavior if let or const is used
+const todos: Todo[] = [
     {id:1, task:"Pick up trash", isDone:false},
     {id:2, task:"Scrub the tub", isDone:false},
     {id:3, task:"Buy groceries", isDone:true}, 
