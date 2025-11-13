@@ -1,19 +1,10 @@
-import express  from "express"
+import app from "./app.js"
 import dotenv from "dotenv"
-import router from "./routes/routes.js"
 
 dotenv.config()
 
-const app = express() 
-const port = process.env.PORT || 3000 
-
-app.use(express.json()) //For parsing JSON bodies (application/json)
-app.use(express.urlencoded({extended: true})) //For parsing URL-encoded form data (x-www-form-urlencoded)
-app.use(express.static('public'))
-app.set('views', 'views') 
-
-app.use("/", router)
-
+const port = process.env.PORT || 3000
+ 
 app.listen(port, ()=>{
     console.log(`Server running at port ${port}`)
-})
+}) 
