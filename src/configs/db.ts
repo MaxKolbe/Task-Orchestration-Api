@@ -1,8 +1,14 @@
-import type { Todo } from "../types/todoTypes.js"
+import mongoose from "mongoose"
+import dotenv from "dotenv"
 
-export const todos: Todo[] = [
-    {id:1, task:"Pick up trash", isDone:false},
-    {id:2, task:"Scrub the tub", isDone:false},
-    {id:3, task:"Buy groceries", isDone:true}, 
-    {id:4, task:"Call parents", isDone:true}
-]
+dotenv.config()
+
+mongoose.connection.on('connected', () => console.log(`Connected to the mongo database successfully`))
+
+mongoose.connection.on('error', (err) => console.log(`Database connection error: ${err} \n`)) 
+
+const connectToDb = async () => { 
+    await mongoose.connect(process.env.DATABASE as string)
+}
+
+export default connectToDb

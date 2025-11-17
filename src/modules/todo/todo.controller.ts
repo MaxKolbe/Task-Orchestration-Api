@@ -1,41 +1,41 @@
 import type { Request, Response } from "express"
 import { getTodo, getOneTodo, postTodo, putTodo, deleteTodo } from "./todo.service.js"
 
-export const getTodoController = (req: Request, res: Response) => {
-    const response = getTodo()
+export const getTodoController = async (req: Request, res: Response) => {
+    const response = await getTodo()
 
     res.status(response.status).json(response)
 }
 
-export const getOneTodoController = (req: Request, res: Response) => {
+export const getOneTodoController = async (req: Request, res: Response) => {
     const { id } = req.params
 
-    const response = getOneTodo(parseInt(id!))
+    const response = await getOneTodo(parseInt(id!))
 
     return res.status(response.status).json(response)
 }
 
-export const postTodoController = (req: Request, res: Response) => {
+export const postTodoController = async (req: Request, res: Response) => {
     const { task } = req.body
     
-    const response = postTodo(task)
+    const response = await postTodo(task)
 
     return res.status(response.status).json(response) 
 }
 
-export const putTodoController = (req: Request, res: Response) => {
+export const putTodoController = async (req: Request, res: Response) => {
     const {id} = req.params
-    const {task, isDone} = req.body
+    const {task, isDone} = req.body 
 
-    const response = putTodo(parseInt(id!), task, isDone)
+    const response = await putTodo(id!, task, isDone)
 
     return res.status(response.status).json(response)
-} 
-
-export const deleteTodoController = (req: Request, res: Response) => {
+}  
+ 
+export const deleteTodoController = async (req: Request, res: Response) => {
     const {id} = req.params
     
-    const response = deleteTodo(parseInt(id!))
+    const response = await deleteTodo(id!)
 
     return res.status(response.status).json(response)
 }

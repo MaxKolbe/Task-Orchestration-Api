@@ -5,13 +5,17 @@
     "outDir": "./dist",
     
     // Environment Settings
-    "module": "nodenext",
+    "module": "esnext",
     "target": "esnext",
 
     // For nodejs:
     "lib": ["esnext"],
     "types": ["node"],
     // and npm install -D @types/node
+
+    "moduleResolution": "node", // Resolve modules using Node.js style
+    "esModuleInterop": true, // Enables interop between ES modules and CommonJS
+    "allowSyntheticDefaultImports": true, // Allows default imports from modules with no default export
 
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
@@ -20,7 +24,6 @@
     // Recommended Options
     "strict": true,
     "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
