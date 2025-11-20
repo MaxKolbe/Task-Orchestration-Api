@@ -8,7 +8,7 @@ mongoose.connection.on('connected', () =>
 );
 
 mongoose.connection.on('error', (err) =>
-  console.log(`Database connection error: ${err} \n`)
+  console.log(`Database connection error: ${err} \n`),
 );
 
 const connectToDb = async () => {

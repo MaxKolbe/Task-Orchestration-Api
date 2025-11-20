@@ -28,7 +28,7 @@ export const getOneTodo = async (id: number) => {
 };
 
 export const postTodo = async (task: string) => {
-  const todosLength = (await TodoModel.find()).length;
+//   const todosLength = (await TodoModel.find()).length;
 
   const newTodo = await TodoModel.create({
     uid: Math.floor(Math.random() * 10000),

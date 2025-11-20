@@ -1,6 +1,8 @@
 ### Notes
-I recently learned of the modular (feature-based) architecture. I will use it to structure my codebase. 
-It takes the form: 
+
+I recently learned of the modular (feature-based) architecture. I will use it to structure my codebase.
+It takes the form:
+
 ```
 /src
  ├── modules
@@ -9,7 +11,7 @@ It takes the form:
  │    │    ├── auth.service.ts
  │    │    ├── auth.route.ts
  │    │    ├── auth.middleware.ts
- │    │    ├── auth.model.ts       
+ │    │    ├── auth.model.ts
  │    │    └── __tests__/
  │    │         └── auth.test.ts
  │    │
