@@ -16,7 +16,7 @@ export const getTodoController = async (req: Request, res: Response) => {
 export const getOneTodoController = async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const response = await getOneTodo(parseInt(id!));
+  const response = await getOneTodo(id!);
 
   return res.status(response.status).json(response);
 };

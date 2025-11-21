@@ -16,7 +16,7 @@ app.use('/v1/todo', todoRouter);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.log(`Internal Server Error: ${err} \n`);
-  // res.status(500).json({message: 'Internal Server Error', error: err})
+  res.status(500).json({message: 'Internal Server Error', err})
 });
 
 export default app;

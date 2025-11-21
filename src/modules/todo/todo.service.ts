@@ -10,7 +10,7 @@ export const getTodo = async () => {
   };
 };
 
-export const getOneTodo = async (id: number) => {
+export const getOneTodo = async (id: string) => {
   const todo = await TodoModel.findById(id);
 
   if (!todo) {
@@ -28,7 +28,7 @@ export const getOneTodo = async (id: number) => {
 };
 
 export const postTodo = async (task: string) => {
-//   const todosLength = (await TodoModel.find()).length;
+  //   const todosLength = (await TodoModel.find()).length;
 
   const newTodo = await TodoModel.create({
     uid: Math.floor(Math.random() * 10000),
@@ -37,12 +37,11 @@ export const postTodo = async (task: string) => {
   });
 
   await newTodo.save();
-  const todos = await TodoModel.find();
 
   return {
     status: 201,
     message: 'Todo created successfully',
-    data: todos,
+    data: newTodo,
   };
 };
 
@@ -60,7 +59,7 @@ export const putTodo = async (id: string, task: string, isDone?: boolean) => {
   todo.isDone = isDone ?? todo.isDone;
   await todo.save();
 
-  return {
+  return { 
     status: 200,
     message: 'success',
     data: todo,
