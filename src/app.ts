@@ -6,10 +6,13 @@ import { Request, Response, NextFunction } from 'express';
 
 const app = express();
 
-let whitelist: string[]= ['http://localhost:3000', 'http://localhost:5173'];
-let corsOptions = {
-  origin: function (origin: any, callback: Function) {
-    if (whitelist.indexOf(origin) !== -1 || !origin) {
+const whitelist: string[] = ['http://localhost:3000', 'http://localhost:5173'];
+const corsOptions = {
+  origin: function (
+    origin: string | undefined,
+    callback: (err: Error | null, allowed?: boolean) => void,
+  ) {
+    if (whitelist.indexOf(origin || '') !== -1 || !origin) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -29,7 +32,7 @@ connectToDb();
 
 app.use('/v1/todo', todoRouter);
 
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
   console.log(`Internal Server Error: ${err.message} \n`);
   res.status(500).json({ success: false, message: err.message });
 });
