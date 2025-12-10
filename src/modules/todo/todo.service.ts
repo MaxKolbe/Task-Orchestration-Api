@@ -59,7 +59,7 @@ export const putTodo = async (id: string, task: string, isDone?: boolean) => {
   todo.isDone = isDone ?? todo.isDone;
   await todo.save();
 
-  return { 
+  return {
     status: 200,
     message: 'success',
     data: todo,

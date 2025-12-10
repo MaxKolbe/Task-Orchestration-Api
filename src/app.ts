@@ -8,10 +8,7 @@ const app = express();
 
 const whitelist: string[] = ['http://localhost:3000', 'http://localhost:5173'];
 const corsOptions = {
-  origin: function (
-    origin: string | undefined,
-    callback: (err: Error | null, allowed?: boolean) => void,
-  ) {
+  origin: function (origin: string | undefined, callback: (err: Error | null, allowed?: boolean) => void) {
     if (whitelist.indexOf(origin || '') !== -1 || !origin) {
       callback(null, true);
     } else {
