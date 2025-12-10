@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { validateTodos } from './todo.middleware.js';
 import {
   getTodoController,
   getOneTodoController,
@@ -11,7 +12,7 @@ const todoRouter = Router();
 
 todoRouter.get('/', getTodoController);
 todoRouter.get('/:id', getOneTodoController);
-todoRouter.post('/', postTodoController);
+todoRouter.post('/', validateTodos, postTodoController);
 todoRouter.put('/:id', putTodoController);
 todoRouter.delete('/:id', deleteTodoController);
 
