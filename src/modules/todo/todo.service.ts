@@ -1,4 +1,19 @@
 import TodoModel from './todo.model.js';
+import pool from '../../configs/dbpg.config.js';
+
+export class Todoservice {
+  constructor(readonly db = pool) {}
+
+  async getTodoService() {}
+
+  async getOneTodoService(id: string) {}
+
+  async postTodoService(task: string) {}
+
+  async updateTodoService(id: string, task: string, isDone?: boolean) {}
+
+  async deleteTodoService(id: string) {}
+}
 
 export const getTodo = async () => {
   const todos = await TodoModel.find();
@@ -83,3 +98,4 @@ export const deleteTodo = async (id: string) => {
     message: 'Successfully deleted todo',
   };
 };
+

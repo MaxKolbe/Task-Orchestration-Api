@@ -1,6 +1,6 @@
 import express from 'express';
 import todoRouter from './modules/todo/todo.route.js';
-import connectToDb from './configs/db.js';
+import connectToDb from './configs/dbmg.config.js';
 import cors from 'cors';
 import { Request, Response, NextFunction } from 'express';
 
