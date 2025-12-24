@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { getTodo, getOneTodo, postTodo, putTodo, deleteTodo } from './todo.service.js';
+import responseHandler from '../../utils/responseHandler.util.js';
 
 export const getTodoController = async (req: Request, res: Response) => {
   const response = await getTodo();

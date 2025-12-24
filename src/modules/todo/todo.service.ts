@@ -98,4 +98,3 @@ export const deleteTodo = async (id: string) => {
     message: 'Successfully deleted todo',
   };
 };
-
