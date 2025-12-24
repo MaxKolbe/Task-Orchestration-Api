@@ -2,7 +2,7 @@ import express from 'express';
 import todoRouter from './modules/todo/todo.route.js';
 import connectToDb from './configs/dbmg.config.js';
 import cors from 'cors';
-import { Request, Response, NextFunction } from 'express';
+import errorHandler from './middlewares/errorHandler.js';
 
 const app = express();
 
@@ -29,9 +29,6 @@ connectToDb();
 
 app.use('/v1/todo', todoRouter);
 
-app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
-  console.log(`Internal Server Error: ${err.message} \n`);
-  res.status(500).json({ success: false, message: err.message });
-});
+app.use(errorHandler);
 
 export default app;
