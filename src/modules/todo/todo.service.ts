@@ -3,8 +3,13 @@ import pool from '../../configs/dbpg.config.js';
 export class Todoservice {
   constructor(readonly db = pool) {}
 
-  async getTodo() {
-    const query = 'SELECT * FROM todo';
+  async getTodo(limit: number, skip: number) {
+    const query = `
+      SELECT * FROM todo
+      OFFSET ${skip}
+      LIMIT ${limit}
+    `;
+
     const todos = await this.db.query(query);
     return todos.rows;
   }
@@ -16,7 +21,6 @@ export class Todoservice {
     `;
 
     const todo = await this.db.query(query, [id]);
-
     return todo.rows[0];
   }
 

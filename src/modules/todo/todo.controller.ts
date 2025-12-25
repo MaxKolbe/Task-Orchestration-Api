@@ -6,7 +6,9 @@ import pool from '../../configs/dbpg.config.js';
 const Todo = new Todoservice(pool);
 export const getTodoController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const response = await Todo.getTodo();
+    const s = Number(req.query.s) | 0;
+    const skip = 5 * s;
+    const response = await Todo.getTodo(5, skip);
     responseHandler(res, 200, 'success', response);
   } catch (err) {
     next(err);
