@@ -27,7 +27,7 @@ export class Todoservice {
   async postTodo(task: string, isDone: boolean) {
     const query = `
       INSERT INTO todo (id, task, is_done, created_at) 
-      VALUES (uuid_generate_v4(), $1, $2, NOW()) 
+      VALUES (uuid_generate_v4(), $1, COALESCE($2, false), NOW()) 
       RETURNING * 
     `; // RETURNING * returns the affected row
 
@@ -59,9 +59,6 @@ export class Todoservice {
       WHERE id = $1
       RETURNING *
     `;
-
-    console.log('***', updateFields, '***');
-    console.log('***', updateString, '***');
 
     const updatedTodo = await this.db.query(query, updateFields);
     return updatedTodo.rows[0];
