@@ -19,7 +19,7 @@ const corsOptions = {
   credentials: true, //Allow cookies/auth
 };
 
-app.use(express.json()); //For parsing JSON bodies (application/json)
+app.use(express.json()); 
 app.use(express.urlencoded({ extended: true })); //For parsing URL-encoded form data (x-www-form-urlencoded)
 app.use(cors(corsOptions)); // applies to all routes, input as argument in a route function to apply it to that route
 app.use(express.static('public'));
