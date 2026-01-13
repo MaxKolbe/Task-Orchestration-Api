@@ -1,8 +1,8 @@
 import express from 'express';
 import todoRouter from './modules/todo/todo.route.js';
-import connectToDb from './configs/db.js';
+import errorHandler from './middlewares/errorHandler.js';
+import { createTodoTable } from './utils/createTables.utils.js';
 import cors from 'cors';
-import { Request, Response, NextFunction } from 'express';
 
 const app = express();
 
@@ -19,19 +19,16 @@ const corsOptions = {
   credentials: true, //Allow cookies/auth
 };
 
-app.use(express.json()); //For parsing JSON bodies (application/json)
+app.use(express.json()); 
 app.use(express.urlencoded({ extended: true })); //For parsing URL-encoded form data (x-www-form-urlencoded)
 app.use(cors(corsOptions)); // applies to all routes, input as argument in a route function to apply it to that route
 app.use(express.static('public'));
 app.set('views', 'views');
 
-connectToDb();
+createTodoTable();
 
 app.use('/v1/todo', todoRouter);
 
-app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
-  console.log(`Internal Server Error: ${err.message} \n`);
-  res.status(500).json({ success: false, message: err.message });
-});
+app.use(errorHandler);
 
 export default app;

@@ -1,85 +1,78 @@
-import TodoModel from './todo.model.js';
+import pool from '../../configs/dbpg.config.js';
 
-export const getTodo = async () => {
-  const todos = await TodoModel.find();
+export class Todoservice {
+  constructor(readonly db = pool) {}
 
-  return {
-    status: 200,
-    message: 'Todos found successfully',
-    data: todos,
-  };
-};
+  async getTodo(limit: number, skip: number) {
+    const query = `
+      SELECT * FROM todo
+      OFFSET ${skip}
+      LIMIT ${limit}
+    `;
 
-export const getOneTodo = async (id: string) => {
-  const todo = await TodoModel.findById(id);
-
-  if (!todo) {
-    return {
-      status: 404,
-      error: 'Todo not found',
-    };
+    const todos = await this.db.query(query);
+    return todos.rows;
   }
 
-  return {
-    status: 200,
-    message: 'Todo found successfully',
-    data: todo,
-  };
-};
+  async getOneTodo(id: string) {
+    const query = `
+      SELECT * FROM todo 
+      WHERE id = $1
+    `;
 
-export const postTodo = async (task: string) => {
-  //   const todosLength = (await TodoModel.find()).length;
-
-  const newTodo = await TodoModel.create({
-    uid: Math.floor(Math.random() * 10000),
-    task,
-    isDone: false,
-  });
-
-  await newTodo.save();
-
-  return {
-    status: 201,
-    message: 'Todo created successfully',
-    data: newTodo,
-  };
-};
-
-export const putTodo = async (id: string, task: string, isDone?: boolean) => {
-  const todo = await TodoModel.findById(id);
-
-  if (!todo) {
-    return {
-      status: 404,
-      error: 'Todo not found',
-    };
+    const todo = await this.db.query(query, [id]);
+    return todo.rows[0];
   }
 
-  todo.task = task || todo.task;
-  todo.isDone = isDone ?? todo.isDone;
-  await todo.save();
+  async postTodo(task: string, isDone: boolean) {
+    const query = `
+      INSERT INTO todo (id, task, is_done, created_at) 
+      VALUES (uuid_generate_v4(), $1, COALESCE($2, false), NOW()) 
+      RETURNING * 
+    `; // RETURNING * returns the affected row
 
-  return {
-    status: 200,
-    message: 'success',
-    data: todo,
-  };
-};
-
-export const deleteTodo = async (id: string) => {
-  const todo = await TodoModel.findById(id);
-
-  if (!todo) {
-    return {
-      status: 404,
-      error: 'Todo not found',
-    };
+    const todo = await this.db.query(query, [task, isDone]);
+    return todo.rows[0];
   }
 
-  await TodoModel.findByIdAndDelete(id);
+  async updateTodo(id: string, task: string, isDone: boolean) {
+    const updateFields: (string | boolean)[] = [id];
+    const updateString: string[] = [];
+    let index = 1;
 
-  return {
-    status: 200,
-    message: 'Successfully deleted todo',
-  };
-};
+    if (task !== undefined) {
+      index++;
+      updateFields.push(task);
+      updateString.push(`task = $${index}`);
+    }
+
+    if (isDone !== undefined) {
+      index++;
+      updateFields.push(isDone);
+      updateString.push(`is_done = $${index}`);
+    }
+
+    //.join() returns a string btw
+    const query = `
+      UPDATE todo
+      SET ${updateString.join(', ')} 
+      WHERE id = $1
+      RETURNING *
+    `;
+
+    const updatedTodo = await this.db.query(query, updateFields);
+    return updatedTodo.rows[0];
+  }
+
+  async deleteTodo(id: string) {
+    // RETURNING * returns the affected row
+    const query = `
+    DELETE FROM todo
+    WHERE id = $1 
+    RETURNING *
+    `;
+
+    const todo = await this.db.query(query, [id]);
+    return todo.rows[0];
+  }
+}

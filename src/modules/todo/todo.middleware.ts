@@ -1,11 +1,7 @@
 import Joi from 'joi';
 import { Request, Response, NextFunction } from 'express';
 
-export const validateTodos = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const validateTodosToCreate = (req: Request, res: Response, next: NextFunction) => {
   try {
     const payload = req.body;
 
@@ -15,8 +11,37 @@ export const validateTodos = (
       isDone: Joi.boolean(),
     });
 
-    const { value, error } = schema.validate(payload);
-    console.log("Here's he value", value)
+    const { error } = schema.validate(payload);
+
+    if (!error) {
+      next();
+    } else {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Invalid payload',
+        error: error.details,
+      });
+    }
+  } catch (error) {
+    return res.status(400).json({
+      status: 'error',
+      message: error,
+    });
+  }
+};
+
+export const validateTodosToUpdate = (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const payload = req.body;
+
+    const schema = Joi.object({
+      uid: Joi.number(),
+      task: Joi.string(),
+      isDone: Joi.boolean(),
+    }).min(1);
+
+    const { error } = schema.validate(payload);
+
     if (!error) {
       next();
     } else {

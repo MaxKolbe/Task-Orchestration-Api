@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { validateTodos } from './todo.middleware.js';
+import { validateTodosToCreate, validateTodosToUpdate } from './todo.middleware.js';
 import {
   getTodoController,
   getOneTodoController,
@@ -12,8 +12,8 @@ const todoRouter = Router();
 
 todoRouter.get('/', getTodoController);
 todoRouter.get('/:id', getOneTodoController);
-todoRouter.post('/', validateTodos, postTodoController);
-todoRouter.put('/:id', putTodoController);
+todoRouter.post('/', validateTodosToCreate, postTodoController);
+todoRouter.put('/:id', validateTodosToUpdate, putTodoController);
 todoRouter.delete('/:id', deleteTodoController);
 
 export default todoRouter;
