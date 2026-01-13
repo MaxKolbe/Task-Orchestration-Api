@@ -1,4 +1,5 @@
 import pool from '../../configs/dbpg.config.js';
+import db from '../../configs/db.config.js';
 
 export class Todoservice {
   constructor(readonly db = pool) {}

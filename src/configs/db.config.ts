@@ -21,7 +21,7 @@ pool.on('error', () => {
 await pool.query('SELECT 1');
 console.log('Database connected successfully');
 
-const db = drizzle(pool);
+const db = drizzle({client: pool, casing: "snake_case"});
 
 export default db;
 
