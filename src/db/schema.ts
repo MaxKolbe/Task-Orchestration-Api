@@ -7,8 +7,8 @@ const timestamps = {
 }
 
 export const todos = p.pgTable('todos', {
-  id: p.integer().primaryKey().generatedAlwaysAsIdentity(),
-  task: p.varchar({ length: 256 }),
+  id: p.uuid().primaryKey().notNull(),
+  task: p.varchar({ length: 256 }).notNull(),
   isdone: p.boolean().default(false),
   ...timestamps, 
 });

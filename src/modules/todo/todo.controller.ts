@@ -1,10 +1,9 @@
 import type { Request, Response, NextFunction } from 'express';
 import responseHandler from '../../utils/responseHandler.util.js';
 import { Todoservice } from './todo.service.js';
-import pool from '../../configs/dbpg.config.js';
 import appdb from '../../configs/db.config.js';
 
-const Todo = new Todoservice(pool, appdb);
+const Todo = new Todoservice(appdb);
 
 export const getTodoController = async (req: Request, res: Response, next: NextFunction) => {
   const s = Number(req.query.s) || 0;

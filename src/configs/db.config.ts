@@ -1,9 +1,10 @@
 import { Pool } from 'pg';
 import { drizzle } from 'drizzle-orm/node-postgres';
+import path from 'path';
 import dotenv from 'dotenv';
 
 dotenv.config({
-  path: '../../.env',
+  path: path.resolve(process.cwd(), '.env'),
 });
 
 const pool = new Pool({
