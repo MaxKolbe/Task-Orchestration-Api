@@ -7,6 +7,9 @@
     "start": "node dist/index.js",
     "dev": "nodemon --exec \"node --loader ts-node/esm\" src/index.ts",
     "watch": "npx tsc -w",
+    "db:push": "npx drizzle-kit push",
+    "db:generate": "npx drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
@@ -20,6 +23,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.45.1",
     "express": "^5.1.0",
     "joi": "^18.0.2",
     "pg": "^8.16.3"
@@ -33,6 +37,7 @@
     "@types/pg": "^8.16.0",
     "@typescript-eslint/eslint-plugin": "^8.47.0",
     "@typescript-eslint/parser": "^8.47.0",
+    "drizzle-kit": "^0.31.8",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",

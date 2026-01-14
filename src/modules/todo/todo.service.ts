@@ -1,78 +1,40 @@
-import pool from '../../configs/dbpg.config.js';
+import appdb from '../../configs/db.config.js';
+import { todos } from '../../db/schema.js';
+import { sql, eq, asc } from 'drizzle-orm';
 
 export class Todoservice {
-  constructor(readonly db = pool) {}
+  constructor(readonly newdb = appdb) {}
 
   async getTodo(limit: number, skip: number) {
-    const query = `
-      SELECT * FROM todo
-      OFFSET ${skip}
-      LIMIT ${limit}
-    `;
+    const result = await this.newdb.select().from(todos).orderBy(asc(todos.task)).limit(limit).offset(skip);
 
-    const todos = await this.db.query(query);
-    return todos.rows;
+    return result;
   }
 
   async getOneTodo(id: string) {
-    const query = `
-      SELECT * FROM todo 
-      WHERE id = $1
-    `;
+    const result = await this.newdb.select().from(todos).where(eq(todos.id, id));
 
-    const todo = await this.db.query(query, [id]);
-    return todo.rows[0];
+    return result[0];
   }
 
   async postTodo(task: string, isDone: boolean) {
-    const query = `
-      INSERT INTO todo (id, task, is_done, created_at) 
-      VALUES (uuid_generate_v4(), $1, COALESCE($2, false), NOW()) 
-      RETURNING * 
-    `; // RETURNING * returns the affected row
+    const result = await this.newdb
+      .insert(todos)
+      .values({ id: sql`uuid_generate_v4()`, task, isdone: isDone })
+      .returning();
 
-    const todo = await this.db.query(query, [task, isDone]);
-    return todo.rows[0];
+    return result[0];
   }
 
   async updateTodo(id: string, task: string, isDone: boolean) {
-    const updateFields: (string | boolean)[] = [id];
-    const updateString: string[] = [];
-    let index = 1;
+    const result = await this.newdb.update(todos).set({ task, isdone: isDone }).where(eq(todos.id, id)).returning();
 
-    if (task !== undefined) {
-      index++;
-      updateFields.push(task);
-      updateString.push(`task = $${index}`);
-    }
-
-    if (isDone !== undefined) {
-      index++;
-      updateFields.push(isDone);
-      updateString.push(`is_done = $${index}`);
-    }
-
-    //.join() returns a string btw
-    const query = `
-      UPDATE todo
-      SET ${updateString.join(', ')} 
-      WHERE id = $1
-      RETURNING *
-    `;
-
-    const updatedTodo = await this.db.query(query, updateFields);
-    return updatedTodo.rows[0];
+    return result[0];
   }
 
   async deleteTodo(id: string) {
-    // RETURNING * returns the affected row
-    const query = `
-    DELETE FROM todo
-    WHERE id = $1 
-    RETURNING *
-    `;
+    const result = await this.newdb.delete(todos).where(eq(todos.id, id)).returning();
 
-    const todo = await this.db.query(query, [id]);
-    return todo.rows[0];
+    return result[0];
   }
 }
