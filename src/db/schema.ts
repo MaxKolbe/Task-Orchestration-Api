@@ -1,9 +1,14 @@
 import * as p from 'drizzle-orm/pg-core';
-import { timestamps } from '../utils/columns.helpers.js';
 
-export const todosTable = p.pgTable('todos', {
+const timestamps = {
+  updated_at: p.timestamp(),
+  created_at: p.timestamp().defaultNow().notNull(),
+  deleted_at: p.timestamp(),
+}
+
+export const todos = p.pgTable('todos', {
   id: p.integer().primaryKey().generatedAlwaysAsIdentity(),
-  task: p.varchar({ length: 256 }).notNull(),
+  task: p.varchar({ length: 256 }),
   isdone: p.boolean().default(false),
   ...timestamps, 
 });

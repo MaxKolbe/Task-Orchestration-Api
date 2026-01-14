@@ -12,6 +12,7 @@ const pool = new Pool({
   database: process.env.PG_DATABASE,
   password: process.env.PG_PASSWORD,
   port: Number(process.env.PG_PORT),
+  ssl: false,
 });
 
 pool.on('error', () => {
@@ -19,11 +20,11 @@ pool.on('error', () => {
 });
 
 await pool.query('SELECT 1');
-console.log('Database connected successfully');
+console.log('Database connected successfully: drizzle');
 
-const db = drizzle({client: pool, casing: "snake_case"});
+const appdb = drizzle({ client: pool, casing: 'snake_case' });
 
-export default db;
+export default appdb;
 
 // For connection with pg database url e.g. Neon
 /* const db = drizzle(process.env.DATABASE_URL); */

@@ -2,8 +2,9 @@ import type { Request, Response, NextFunction } from 'express';
 import responseHandler from '../../utils/responseHandler.util.js';
 import { Todoservice } from './todo.service.js';
 import pool from '../../configs/dbpg.config.js';
+import appdb from '../../configs/db.config.js';
 
-const Todo = new Todoservice(pool);
+const Todo = new Todoservice(pool, appdb);
 
 export const getTodoController = async (req: Request, res: Response, next: NextFunction) => {
   const s = Number(req.query.s) || 0;
@@ -23,7 +24,7 @@ export const getOneTodoController = async (req: Request, res: Response, next: Ne
     if (!response) responseHandler(res, 404, 'todo not found');
     responseHandler(res, 200, 'success', response);
   } catch (err) {
-    next(err);
+    next(err); 
   }
 };
 

@@ -1,18 +1,25 @@
 import pool from '../../configs/dbpg.config.js';
-import db from '../../configs/db.config.js';
+import appdb from '../../configs/db.config.js';
+import { todos } from '../../db/schema.js';
 
 export class Todoservice {
-  constructor(readonly db = pool) {}
+  constructor(readonly db = pool, readonly newdb = appdb) {}
+
+  // async getTodo(limit: number, skip: number) {
+  //   const query = `
+  //     SELECT * FROM todo
+  //     OFFSET ${skip}
+  //     LIMIT ${limit}
+  //   `;
+
+  //   const todos = await this.db.query(query); 
+  //   return todos.rows;
+  // }
 
   async getTodo(limit: number, skip: number) {
-    const query = `
-      SELECT * FROM todo
-      OFFSET ${skip}
-      LIMIT ${limit}
-    `;
-
-    const todos = await this.db.query(query);
-    return todos.rows;
+    const result = await this.newdb.select().from(todos).offset(skip).limit(limit)
+    console.log(result)
+    return result
   }
 
   async getOneTodo(id: string) {
@@ -25,17 +32,23 @@ export class Todoservice {
     return todo.rows[0];
   }
 
-  async postTodo(task: string, isDone: boolean) {
-    const query = `
-      INSERT INTO todo (id, task, is_done, created_at) 
-      VALUES (uuid_generate_v4(), $1, COALESCE($2, false), NOW()) 
-      RETURNING * 
-    `; // RETURNING * returns the affected row
+  // async postTodo(task: string, isDone: boolean) {
+  //   const query = `
+  //     INSERT INTO todo (id, task, is_done, created_at) 
+  //     VALUES (uuid_generate_v4(), $1, COALESCE($2, false), NOW()) 
+  //     RETURNING * 
+  //   `; // RETURNING * returns the affected row 
 
-    const todo = await this.db.query(query, [task, isDone]);
-    return todo.rows[0];
+  //   const todo = await this.db.query(query, [task, isDone]);
+  //   return todo.rows[0];
+  // }
+
+    async postTodo(task: string, isDone: boolean) {
+   
+    const result = await this.newdb.insert(todos).values({task, isdone: isDone}).returning()
+    console.log(result)
+    return result;
   }
-
   async updateTodo(id: string, task: string, isDone: boolean) {
     const updateFields: (string | boolean)[] = [id];
     const updateString: string[] = [];
