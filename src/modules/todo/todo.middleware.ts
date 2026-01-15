@@ -1,7 +1,8 @@
 import Joi from 'joi';
 import { Request, Response, NextFunction } from 'express';
 
-export const validateTodosToCreate = (req: Request, res: Response, next: NextFunction) => {
+// Validate Todos To Be Created
+export const vttbc = (req: Request, res: Response, next: NextFunction) => {
   try {
     const payload = req.body;
 
@@ -30,7 +31,8 @@ export const validateTodosToCreate = (req: Request, res: Response, next: NextFun
   }
 };
 
-export const validateTodosToUpdate = (req: Request, res: Response, next: NextFunction) => {
+// Validate Todos To Be Updated
+export const vttbu = (req: Request, res: Response, next: NextFunction) => {
   try {
     const payload = req.body;
 

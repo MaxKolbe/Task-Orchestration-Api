@@ -1,6 +1,6 @@
 import appdb from '../../configs/db.config.js';
-import { todos } from '../../db/schema.js';
 import { sql, eq, asc } from 'drizzle-orm';
+import { todos } from './todo.schema.js';
 
 export class Todoservice {
   constructor(readonly newdb = appdb) {}
