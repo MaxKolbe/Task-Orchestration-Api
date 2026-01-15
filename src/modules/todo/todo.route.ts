@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { validateTodosToCreate, validateTodosToUpdate } from './todo.middleware.js';
+import { vttbc, vttbu } from './todo.middleware.js';
 import {
   getTodoController,
   getOneTodoController,
@@ -12,8 +12,8 @@ const todoRouter = Router();
 
 todoRouter.get('/', getTodoController);
 todoRouter.get('/:id', getOneTodoController);
-todoRouter.post('/', validateTodosToCreate, postTodoController);
-todoRouter.put('/:id', validateTodosToUpdate, putTodoController);
+todoRouter.post('/', vttbc, postTodoController);
+todoRouter.put('/:id', vttbu, putTodoController);
 todoRouter.delete('/:id', deleteTodoController);
 
 export default todoRouter;

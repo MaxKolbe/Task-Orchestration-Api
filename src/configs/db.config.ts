@@ -21,7 +21,7 @@ pool.on('error', () => {
 });
 
 await pool.query('SELECT 1');
-console.log('Database connected successfully: drizzle');
+console.log('Database connected successfully');
 
 const appdb = drizzle({ client: pool, casing: 'snake_case' });
 
