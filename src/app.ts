@@ -1,7 +1,6 @@
 import express from 'express';
 import todoRouter from './modules/todo/todo.route.js';
 import errorHandler from './middlewares/errorHandler.js';
-// import { createTodoTable } from './utils/createTables.utils.js';
 import cors from 'cors';
 
 const app = express();
@@ -24,8 +23,6 @@ app.use(express.urlencoded({ extended: true })); //For parsing URL-encoded form 
 app.use(cors(corsOptions)); // applies to all routes, input as argument in a route function to apply it to that route
 app.use(express.static('public'));
 app.set('views', 'views');
-
-// createTodoTable();
 
 app.use('/v1/todo', todoRouter);
 
