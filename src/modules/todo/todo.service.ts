@@ -3,7 +3,7 @@ import { sql, eq, asc } from 'drizzle-orm';
 import { todos } from './todo.schema.js';
 
 export class Todoservice {
-  constructor(readonly newdb = appdb) {}
+  constructor(private readonly newdb = appdb) {}
 
   async getTodo(limit: number, skip: number) {
     const result = await this.newdb.select().from(todos).orderBy(asc(todos.task)).limit(limit).offset(skip);

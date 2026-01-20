@@ -25,6 +25,9 @@ console.log('Database connected successfully');
 
 const appdb = drizzle({ client: pool, casing: 'snake_case' });
 
+await appdb.execute('select 1');
+console.log('Drizzle connected successfully');
+
 export default appdb;
 
 // For connection with pg database url e.g. Neon
