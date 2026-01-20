@@ -1,12 +1,12 @@
 import appdb from '../../configs/db.config.js';
 import { todos } from './todo.schema.js';
 import { sql, eq, asc } from 'drizzle-orm';
-import { Todo, Todoservicetype } from '../../types/todo.d.js';
+import { Todo, Todoservicetype, Cursor } from '../../types/todo.d.js';
 
 export class Todoservice implements Todoservicetype<Todo> {
   constructor(private readonly newdb = appdb) {}
 
-  async getTodo(limit: number, skip: number): Promise<Todo[] | undefined>  {
+  async getTodo(limit: number, skip: number): Promise<Todo[] | undefined> {
     const result = await this.newdb.select().from(todos).orderBy(asc(todos.task)).limit(limit).offset(skip);
     return result;
   }
@@ -14,6 +14,23 @@ export class Todoservice implements Todoservicetype<Todo> {
   async getOneTodo(id: string): Promise<Todo | undefined> {
     const result = await this.newdb.select().from(todos).where(eq(todos.id, id));
     return result[0];
+  }
+
+  async getTodoCursor(limit: number, afterId: string): Promise<Cursor | undefined> {
+    if (afterId === '0') {
+      const result = await this.newdb.select().from(todos).orderBy(asc(todos.task)).limit(limit);
+      const cursor = result[result.length - 1]?.created_at;
+      return { result, cursor };
+    } else {
+      const result = await this.newdb
+        .select()
+        .from(todos)
+        .orderBy(asc(todos.task))
+        .where(sql`${todos.created_at} > ${afterId}`)
+        .limit(limit);
+      const cursor = result[result.length - 1]?.created_at;
+      return { result, cursor };
+    }
   }
 
   async postTodo(task: string, isDone: boolean): Promise<Todo | undefined> {

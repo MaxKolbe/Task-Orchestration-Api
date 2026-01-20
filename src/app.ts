@@ -24,7 +24,7 @@ app.use(cors(corsOptions)); // applies to all routes, input as argument in a rou
 app.use(express.static('public'));
 app.set('views', 'views');
 
-app.use('/v1/todo', todoRouter);
+app.use('/v1/todos', todoRouter);
 
 app.use(errorHandler);
 

@@ -1,7 +1,8 @@
 import type { Request, Response, NextFunction } from 'express';
-import responseHandler from '../../utils/responseHandler.util.js';
 import { Todoservice } from './todo.service.js';
+import responseHandler from '../../utils/responseHandler.util.js';
 import appdb from '../../configs/db.config.js';
+import { after } from 'node:test';
 
 const Todo = new Todoservice(appdb);
 
@@ -24,6 +25,16 @@ export const getOneTodoController = async (req: Request, res: Response, next: Ne
     responseHandler(res, 200, 'success', response);
   } catch (err) {
     next(err); 
+  } 
+};
+
+export const getTodoControllerCursor = async (req: Request, res: Response, next: NextFunction) => {
+  const afterId = (req.query.after)?.toString() || '0'
+  try {
+    const response = await Todo.getTodoCursor(5, afterId!);
+    responseHandler(res, 200, 'success', response);
+  } catch (err) {
+    next(err);
   }
 };
 
