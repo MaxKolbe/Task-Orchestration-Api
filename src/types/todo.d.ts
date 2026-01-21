@@ -7,9 +7,14 @@ export interface Todo {
   isdone: boolean | null;
 }
 
+export interface Todocursor {
+  created_at: Date | undefined;
+  id: string | undefined;
+}
+
 export interface Cursor {
   result: Todo[];
-  cursor: Date | undefined;
+  cursor: string;
 }
 
 export interface Todoservicetype<T> {
