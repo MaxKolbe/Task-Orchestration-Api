@@ -16,21 +16,19 @@ export class Todoservice implements Todoservicetype<Todo> {
     return result[0];
   }
 
-  async getTodoCursor(limit: number, afterId: string): Promise<Cursor | undefined> {
-    if (afterId === '0') {
-      const result = await this.newdb.select().from(todos).orderBy(asc(todos.task)).limit(limit);
-      const cursor = result[result.length - 1]?.created_at;
-      return { result, cursor };
-    } else {
-      const result = await this.newdb
-        .select()
-        .from(todos)
-        .orderBy(asc(todos.task))
-        .where(sql`${todos.created_at} > ${afterId}`)
-        .limit(limit);
-      const cursor = result[result.length - 1]?.created_at;
-      return { result, cursor };
+  async getTodoCursor(limit: number, cursor?: string): Promise<Cursor | undefined> {
+    if (!cursor) {
+      const result = await this.newdb.select().from(todos).orderBy(asc(todos.created_at)).limit(limit);
+      return { result, cursor: result[result.length - 1]?.created_at };
     }
+
+    const result = await this.newdb
+      .select()
+      .from(todos)
+      .orderBy(asc(todos.created_at))
+      .where(sql`${todos.created_at} > ${cursor}`)
+      .limit(limit);
+    return { result, cursor: result[result.length - 1]?.created_at };
   }
 
   async postTodo(task: string, isDone: boolean): Promise<Todo | undefined> {

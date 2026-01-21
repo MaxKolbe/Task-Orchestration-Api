@@ -11,11 +11,11 @@ import {
 
 const todoRouter = Router();
 
-todoRouter.get('/', getTodoController);
-todoRouter.get('/todos', getTodoControllerCursor); //cursor based pagination
-todoRouter.get('/todo/:id', getOneTodoController);
-todoRouter.post('/', vttbc, postTodoController);
-todoRouter.put('/:id', vttbu, putTodoController);
-todoRouter.delete('/:id', deleteTodoController);
+todoRouter.get('/todos', getTodoController);
+todoRouter.get('/todos/cursor', getTodoControllerCursor);
+todoRouter.get('/todos/todo/:id', getOneTodoController);
+todoRouter.post('/todos', vttbc, postTodoController);
+todoRouter.put('/todos/:id', vttbu, putTodoController);
+todoRouter.delete('todos/:id', deleteTodoController);
 
 export default todoRouter;
