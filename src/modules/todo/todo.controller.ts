@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
-import responseHandler from '../../utils/responseHandler.util.js';
 import { Todoservice } from './todo.service.js';
+import responseHandler from '../../utils/responseHandler.util.js';
 import appdb from '../../configs/db.config.js';
 
 const Todo = new Todoservice(appdb);
@@ -23,7 +23,17 @@ export const getOneTodoController = async (req: Request, res: Response, next: Ne
     if (!response) responseHandler(res, 404, 'todo not found');
     responseHandler(res, 200, 'success', response);
   } catch (err) {
-    next(err); 
+    next(err);
+  }
+};
+
+export const getTodoControllerCursor = async (req: Request, res: Response, next: NextFunction) => {
+  const cursor = req.query.cursor ? req.query.cursor.toString() : undefined;
+  try {
+    const response = await Todo.getTodoCursor(5, cursor);
+    responseHandler(res, 200, 'success', response);
+  } catch (err) {
+    next(err);
   }
 };
 

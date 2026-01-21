@@ -1,21 +1,37 @@
 import appdb from '../../configs/db.config.js';
-import { sql, eq, asc } from 'drizzle-orm';
 import { todos } from './todo.schema.js';
+import { sql, eq, asc } from 'drizzle-orm';
+import { Todo, Todoservicetype, Cursor } from '../../types/todo.d.js';
 
-export class Todoservice {
-  constructor(readonly newdb = appdb) {}
+export class Todoservice implements Todoservicetype<Todo> {
+  constructor(private readonly newdb = appdb) {}
 
-  async getTodo(limit: number, skip: number) {
+  async getTodo(limit: number, skip: number): Promise<Todo[] | undefined> {
     const result = await this.newdb.select().from(todos).orderBy(asc(todos.task)).limit(limit).offset(skip);
     return result;
   }
 
-  async getOneTodo(id: string) {
+  async getOneTodo(id: string): Promise<Todo | undefined> {
     const result = await this.newdb.select().from(todos).where(eq(todos.id, id));
     return result[0];
-  }  
+  }
 
-  async postTodo(task: string, isDone: boolean) {
+  async getTodoCursor(limit: number, cursor?: string): Promise<Cursor | undefined> {
+    if (!cursor) {
+      const result = await this.newdb.select().from(todos).orderBy(asc(todos.created_at)).limit(limit);
+      return { result, cursor: result[result.length - 1]?.created_at };
+    }
+
+    const result = await this.newdb
+      .select()
+      .from(todos)
+      .orderBy(asc(todos.created_at))
+      .where(sql`${todos.created_at} > ${cursor}`)
+      .limit(limit);
+    return { result, cursor: result[result.length - 1]?.created_at };
+  }
+
+  async postTodo(task: string, isDone: boolean): Promise<Todo | undefined> {
     const result = await this.newdb
       .insert(todos)
       .values({ id: sql`uuid_generate_v4()`, task, isdone: isDone })
@@ -23,12 +39,12 @@ export class Todoservice {
     return result[0];
   }
 
-  async updateTodo(id: string, task: string, isDone: boolean) {
+  async updateTodo(id: string, task: string, isDone: boolean): Promise<Todo | undefined> {
     const result = await this.newdb.update(todos).set({ task, isdone: isDone }).where(eq(todos.id, id)).returning();
     return result[0];
   }
 
-  async deleteTodo(id: string) {
+  async deleteTodo(id: string): Promise<Todo | undefined> {
     const result = await this.newdb.delete(todos).where(eq(todos.id, id)).returning();
     return result[0];
   }
