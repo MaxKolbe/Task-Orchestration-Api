@@ -1,7 +1,14 @@
 import appdb from '../../configs/db.config.js';
 import { todos } from './todo.schema.js';
 import { sql, eq, asc } from 'drizzle-orm';
-import { Todo, Todoservicetype, Cursor } from '../../types/todo.d.js';
+import { Todo, Todoservicetype, Cursor, Todocursor } from '../../types/todo.d.js';
+
+function encodeCursor(cursor: Todocursor): string {
+  return Buffer.from(JSON.stringify(cursor)).toString('base64');
+}
+function decodeCursor(cursor: string): Todocursor {
+  return JSON.parse(Buffer.from(cursor, 'base64').toString());
+}
 
 export class Todoservice implements Todoservicetype<Todo> {
   constructor(private readonly newdb = appdb) {}
@@ -18,17 +25,36 @@ export class Todoservice implements Todoservicetype<Todo> {
 
   async getTodoCursor(limit: number, cursor?: string): Promise<Cursor | undefined> {
     if (!cursor) {
-      const result = await this.newdb.select().from(todos).orderBy(asc(todos.created_at)).limit(limit);
-      return { result, cursor: result[result.length - 1]?.created_at };
+      const result = await this.newdb.select().from(todos).orderBy(asc(todos.created_at), asc(todos.id)).limit(limit); 
+      return {
+        result,
+        cursor: encodeCursor({
+          created_at: result[result.length - 1]?.created_at,
+          id: result[result.length - 1]?.id,
+        }),
+      };
     }
 
+    const { created_at, id } = decodeCursor(cursor);
     const result = await this.newdb
       .select()
       .from(todos)
-      .orderBy(asc(todos.created_at))
-      .where(sql`${todos.created_at} > ${cursor}`)
+      .orderBy(asc(todos.created_at), asc(todos.id)) 
+      .where(
+        sql`${todos.created_at} > ${created_at} 
+        OR (
+        ${todos.created_at} = ${created_at} AND ${todos.id} > ${id}
+        )`,
+      )
       .limit(limit);
-    return { result, cursor: result[result.length - 1]?.created_at };
+
+    return {
+      result,
+      cursor: encodeCursor({
+        created_at: result[result.length - 1]?.created_at,
+        id: result[result.length - 1]?.id,
+      }),
+    };
   }
 
   async postTodo(task: string, isDone: boolean): Promise<Todo | undefined> {
