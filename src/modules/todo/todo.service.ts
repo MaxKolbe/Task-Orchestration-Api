@@ -14,7 +14,7 @@ export class Todoservice implements Todoservicetype<Todo> {
   constructor(private readonly newdb = appdb) {}
 
   async getTodo(limit: number, skip: number): Promise<Todo[] | undefined> {
-    const result = await this.newdb.select().from(todos).orderBy(asc(todos.task)).limit(limit).offset(skip);
+    const result = await this.newdb.select().from(todos).orderBy(asc(todos.created_at), asc(todos.id)).limit(limit).offset(skip);
     return result;
   }
 
