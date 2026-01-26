@@ -16,6 +16,6 @@ todoRouter.get('/todos/cursor', getTodoControllerCursor);
 todoRouter.get('/todos/todo/:id', getOneTodoController);
 todoRouter.post('/todos', vttbc, postTodoController);
 todoRouter.put('/todos/:id', vttbu, putTodoController);
-todoRouter.delete('todos/:id', deleteTodoController);
+todoRouter.delete('/todos/:id', deleteTodoController);
 
 export default todoRouter;
