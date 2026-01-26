@@ -6,9 +6,7 @@ dotenv.config({
   path: path.resolve(process.cwd(), '.env'),
 });
 
-const redisClient = createClient({
-  // url: process.env.REDIS_URL! //Leave blank if connecting to localhost 
-});
+const redisClient = createClient(/*{url: process.env.REDIS_URL! //Leave blank if connecting to localhost }*/);
 
 redisClient.on('error', (err) => {
   console.log('Redis Client Error', err);
