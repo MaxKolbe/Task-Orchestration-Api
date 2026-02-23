@@ -73,22 +73,36 @@ export const deleteTodoController = async (req: Request, res: Response, next: Ne
 };
 
 export const postPhotoController = async (req: Request, res: Response, next: NextFunction) => {
-  // Upload an image
-  const options = {
+  /* const options = {
     use_filename: true, // Sets the public ID to the filename of the uploaded file.
     unique_filename: true, // apply random characters to the public ID
     overwrite: true, // Overwrites any image with the same public ID on upload.
     // asset_folder: "" // The full path of the folder where the asset is placed within the Cloudinary repository. If not specified, the uploaded asset will be located in the root of your product environment asset repository
-  };
-  if(!req.file){
-    return responseHandler(res, 404, "No file parameter or property idk")
-  }
-  console.log(`Req: ${req}`, `ReqFile: ${req.file!}`, `ReqFilePath: ${req.file!.path}`)
-  try {
-    // const uploadResult = await cloudinary.uploader.upload(req.file!.path, options);//takes path and options
+  }; */
 
-    console.log(req.host); 
-    return responseHandler(res, 200, "uploaded successfully")
+  if (!req.file) {
+    return responseHandler(res, 404, 'No file. Check input fields');
+  }
+ 
+  try {
+    // when storing file to disk
+    /* const uploadResult = await cloudinary.uploader.upload(req.file!.path, options); */
+
+    // when storing file to memory
+    const uploadResult = await new Promise((resolve, reject) => {
+      cloudinary.uploader
+        .upload_stream((error, uploadResult) => {
+          if (error) {
+            return reject(error);
+          }
+          return resolve(uploadResult);
+        })
+        .end(req.file?.buffer);
+    });
+
+    // In app would sotre uploadresult.url to db
+    console.log(uploadResult);
+    return responseHandler(res, 200, 'uploaded successfully');
   } catch (err) {
     next(err);
   }
