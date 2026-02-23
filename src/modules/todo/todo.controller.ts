@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from 'express';
 import { Todoservice } from './todo.service.js';
 import responseHandler from '../../utils/responseHandler.util.js';
 import appdb from '../../configs/db.config.js';
+import cloudinary from '../../configs/cloudinary.config.js';
 
 const Todo = new Todoservice(appdb);
 
@@ -66,6 +67,28 @@ export const deleteTodoController = async (req: Request, res: Response, next: Ne
     const response = await Todo.deleteTodo(id!);
     if (!response) responseHandler(res, 404, 'todo not deleted');
     responseHandler(res, 200, 'success', response);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const postPhotoController = async (req: Request, res: Response, next: NextFunction) => {
+  // Upload an image
+  const options = {
+    use_filename: true, // Sets the public ID to the filename of the uploaded file.
+    unique_filename: true, // apply random characters to the public ID
+    overwrite: true, // Overwrites any image with the same public ID on upload.
+    // asset_folder: "" // The full path of the folder where the asset is placed within the Cloudinary repository. If not specified, the uploaded asset will be located in the root of your product environment asset repository
+  };
+  if(!req.file){
+    return responseHandler(res, 404, "No file parameter or property idk")
+  }
+  console.log(`Req: ${req}`, `ReqFile: ${req.file!}`, `ReqFilePath: ${req.file!.path}`)
+  try {
+    // const uploadResult = await cloudinary.uploader.upload(req.file!.path, options);//takes path and options
+
+    console.log(req.host); 
+    return responseHandler(res, 200, "uploaded successfully")
   } catch (err) {
     next(err);
   }
