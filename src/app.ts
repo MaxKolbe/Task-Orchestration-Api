@@ -2,6 +2,7 @@ import express from 'express';
 import todoRouter from './modules/todo/todo.route.js';
 import errorHandler from './middlewares/errorHandler.js';
 import cors from 'cors';
+import {connectRedis} from "./configs/cache.config.js"
 
 const app = express();
 
@@ -18,14 +19,16 @@ const corsOptions = {
   credentials: true, //Allow cookies/auth
 };
 
-app.use(express.json()); 
+app.use(express.json());
 app.use(express.urlencoded({ extended: true })); //For parsing URL-encoded form data (x-www-form-urlencoded)
 app.use(cors(corsOptions)); // applies to all routes, input as argument in a route function to apply it to that route
 app.use(express.static('public'));
 app.set('views', 'views');
 
-app.use('/v1/todo', todoRouter);
+// connectRedis();
 
+app.use('/v1', todoRouter);
+   
 app.use(errorHandler);
 
 export default app;

@@ -9,7 +9,8 @@
     "watch": "npx tsc -w",
     "db:push": "npx drizzle-kit push",
     "db:generate": "npx drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
+    "db:migrate": "npx drizzle-kit migrate",
+    "db:gen-mig": "npx drizzle-kit generate && npx drizzle-kit migrate",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
@@ -21,12 +22,16 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@types/multer": "^2.0.0",
+    "cloudinary": "^2.9.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.45.1",
     "express": "^5.1.0",
     "joi": "^18.0.2",
-    "pg": "^8.16.3"
+    "multer": "^2.0.2",
+    "pg": "^8.16.3",
+    "redis": "^5.10.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
@@ -35,6 +40,7 @@
     "@types/joi": "^17.2.2",
     "@types/node": "^24.10.0",
     "@types/pg": "^8.16.0",
+    "@types/redis": "^4.0.10",
     "@typescript-eslint/eslint-plugin": "^8.47.0",
     "@typescript-eslint/parser": "^8.47.0",
     "drizzle-kit": "^0.31.8",
