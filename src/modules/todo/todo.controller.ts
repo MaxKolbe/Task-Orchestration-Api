@@ -2,7 +2,6 @@ import type { Request, Response, NextFunction } from 'express';
 import { Todoservice } from './todo.service';
 import responseHandler from '../../utils/responseHandler.util';
 import appdb from '../../configs/db.config';
-import cloudinary from '../../configs/cloudinary.config';
 
 const Todo = new Todoservice(appdb);
 
@@ -90,18 +89,9 @@ export const postPhotoController = async (req: Request, res: Response, next: Nex
 
     // when storing file to memory
     await console.log(req.file.buffer) 
-    const uploadResult = await new Promise((resolve, reject) => {
-      cloudinary.uploader
-        .upload_stream((error, uploadResult) => {
-          if (error) {
-            return reject(error);
-          }
-          return resolve(uploadResult);
-        })
-        .end(req.file?.buffer);
-    });
 
-    // In app would sotre uploadresult.url to db
+    const uploadResult = Todo.uploadPhoto(req)
+    // In app would store uploadresult.url to db
     console.log(uploadResult);
     return responseHandler(res, 201, 'uploaded successfully');
   } catch (err) {

@@ -1,5 +1,7 @@
 import appdb from '../../configs/db.config';
 import redisClient from '../../configs/cache.config';
+import cloudinary from '../../configs/cloudinary.config';
+import { Request } from 'express';
 import { todos } from './todo.schema';
 import { sql, eq, asc } from 'drizzle-orm';
 import { Todo, Todoservicetype, Cursor } from '../../types/todo.d';
@@ -129,8 +131,22 @@ export class Todoservice implements Todoservicetype<Todo> {
     const result = await this.newdb.delete(todos).where(eq(todos.id, id)).returning();
 
     await redisClient.del(`api:get:todo:${id}`);
-    await delPattern(`api:get:todos:*`)
+    await delPattern(`api:get:todos:*`);
 
     return result[0];
+  }
+
+  async uploadPhoto(req: Request) {
+    const uploadResult = await new Promise((resolve, reject) => {
+      cloudinary.uploader
+        .upload_stream((error, uploadResult) => {
+          if (error) {
+            return reject(error);
+          }
+          return resolve(uploadResult);
+        })
+        .end(req.file?.buffer);
+    });
+    return uploadResult; 
   }
 }
