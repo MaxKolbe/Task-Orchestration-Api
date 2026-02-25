@@ -1,8 +1,8 @@
 import express from 'express';
-import todoRouter from './modules/todo/todo.route.js';
-import errorHandler from './middlewares/errorHandler.js';
+import todoRouter from './modules/todo/todo.route';
+import errorHandler from './middlewares/errorHandler';
 import cors from 'cors';
-import {connectRedis} from "./configs/cache.config.js"
+import {connectRedis} from "./configs/cache.config"
 
 const app = express();
 
@@ -25,10 +25,11 @@ app.use(cors(corsOptions)); // applies to all routes, input as argument in a rou
 app.use(express.static('public'));
 app.set('views', 'views');
 
-// connectRedis();
+connectRedis();
 
 app.use('/v1', todoRouter);
    
 app.use(errorHandler);
 
 export default app;
+ 

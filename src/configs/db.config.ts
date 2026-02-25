@@ -7,12 +7,15 @@ dotenv.config({
   path: path.resolve(process.cwd(), '.env'),
 });
 
+const dbMap = new Map([
+  ['test', process.env.PG_TEST_CONNECTION_STRING!],
+  ['development', process.env.PG_DEV_CONNECTION_STRING!],
+  ['production', process.env.PG_PROD_CONNECTION_STRING!],
+]);
+const dbUrl = dbMap.get(process.env.NODE_ENV!);
+
 const pool = new Pool({
-  host: process.env.PG_HOST,
-  user: process.env.PG_USER,
-  database: process.env.PG_DATABASE,
-  password: process.env.PG_PASSWORD,
-  port: Number(process.env.PG_PORT),
+  connectionString: dbUrl,
   ssl: false,
 });
 
@@ -20,12 +23,12 @@ pool.on('error', () => {
   console.log('Error Connecting to the database Pool');
 });
 
-await pool.query('SELECT 1');
+// await pool.query('SELECT 1');
 console.log('Database connected successfully');
 
 const appdb = drizzle({ client: pool, casing: 'snake_case' });
 
-await appdb.execute('select 1');
+// await appdb.execute('select 1');
 console.log('Drizzle connected successfully');
 
 export default appdb;

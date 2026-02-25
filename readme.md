@@ -6,6 +6,14 @@ It takes the form:
 ```
 /src
  ├── modules
+ |    ├── todo
+ │    │    ├── todo.controller.ts
+ │    │    ├── todo.service.ts
+ │    │    ├── todo.route.ts
+ │    │    ├── todo.middleware.ts
+ │    │    ├── todo.model.ts
+ │    │    └── __tests__/
+ │    │         └── todo.test.ts
  │    ├── auth
  │    │    ├── auth.controller.ts
  │    │    ├── auth.service.ts

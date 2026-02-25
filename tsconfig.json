@@ -10,7 +10,7 @@
 
     // For nodejs:
     "lib": ["esnext"],
-    "types": ["node"],
+    "types": ["node", "jest"],
     // and npm install -D @types/node
 
     "moduleResolution": "node", // Resolve modules using Node.js style

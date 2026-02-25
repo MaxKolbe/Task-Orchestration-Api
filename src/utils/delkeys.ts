@@ -1,4 +1,4 @@
-import redisClient from '../configs/cache.config.js';
+import redisClient from '../configs/cache.config';
 
 export async function delPattern(pattern: string) {
   try {

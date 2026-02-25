@@ -1,8 +1,8 @@
 import type { Request, Response, NextFunction } from 'express';
-import { Todoservice } from './todo.service.js';
-import responseHandler from '../../utils/responseHandler.util.js';
-import appdb from '../../configs/db.config.js';
-import cloudinary from '../../configs/cloudinary.config.js';
+import { Todoservice } from './todo.service';
+import responseHandler from '../../utils/responseHandler.util';
+import appdb from '../../configs/db.config';
+import cloudinary from '../../configs/cloudinary.config';
 
 const Todo = new Todoservice(appdb);
 
@@ -81,7 +81,7 @@ export const postPhotoController = async (req: Request, res: Response, next: Nex
   }; */
 
   if (!req.file) {
-    return responseHandler(res, 404, 'No file. Check input fields');
+    return responseHandler(res, 400, 'No file. Check input fields');
   }
  
   try {
@@ -89,6 +89,7 @@ export const postPhotoController = async (req: Request, res: Response, next: Nex
     /* const uploadResult = await cloudinary.uploader.upload(req.file!.path, options); */
 
     // when storing file to memory
+    await console.log(req.file.buffer) 
     const uploadResult = await new Promise((resolve, reject) => {
       cloudinary.uploader
         .upload_stream((error, uploadResult) => {
@@ -102,7 +103,7 @@ export const postPhotoController = async (req: Request, res: Response, next: Nex
 
     // In app would sotre uploadresult.url to db
     console.log(uploadResult);
-    return responseHandler(res, 200, 'uploaded successfully');
+    return responseHandler(res, 201, 'uploaded successfully');
   } catch (err) {
     next(err);
   }
