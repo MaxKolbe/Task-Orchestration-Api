@@ -2,7 +2,9 @@ import express from 'express';
 import todoRouter from './modules/todo/todo.route';
 import errorHandler from './middlewares/errorHandler';
 import cors from 'cors';
-import {connectRedis} from "./configs/cache.config"
+// import {connectRedis} from "./configs/cache.config"
+import paymentRouter from "./modules/payment/payment"
+
 
 const app = express();
 
@@ -25,9 +27,10 @@ app.use(cors(corsOptions)); // applies to all routes, input as argument in a rou
 app.use(express.static('public'));
 app.set('views', 'views');
 
-connectRedis();
+// connectRedis();
 
 app.use('/v1', todoRouter);
+app.use('/v1/donate', paymentRouter);
    
 app.use(errorHandler);
 
