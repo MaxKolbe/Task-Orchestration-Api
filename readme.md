@@ -1,8 +1,15 @@
-### Notes
+## Branches
+Check branches for isolated implementations of the following:
+1. Todo app with static/in-memory database: branch/static
+2. Todo app using mongodb database: branch/mongo
+3. Todo app using postgresql database: branch/postgres
+4. Todo app using drizzle-orm: branch/drizzle
+5. Todo app with redis cache: cache
+6. Todo app with third party media storage (with cloudinary): branch/s3
+7. Todo app with paystack api: branch/paystack
+The main branch composes of all these but uses drizzle-orm. 
 
-I recently learned of the modular (feature-based) architecture. I will use it to structure my codebase.
-It takes the form:
-
+### Project Architecture (modular (feature-based) architecture)
 ```
 /src
  ├── modules
