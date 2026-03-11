@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
-import { Todoservice } from './todo.service';
-import responseHandler from '../../utils/responseHandler.util';
-import appdb from '../../configs/db.config';
+import { Todoservice } from './todo.service.js';
+import responseHandler from '../../utils/responseHandler.util.js';
+import appdb from '../../configs/db.config.js';
 
 const Todo = new Todoservice(appdb);
 

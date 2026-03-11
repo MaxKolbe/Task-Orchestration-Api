@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { vttbc, vttbu } from './todo.middleware';
+import { vttbc, vttbu } from './todo.middleware.js';
 import {
   getTodoController,
   getOneTodoController,
@@ -8,8 +8,8 @@ import {
   putTodoController,
   deleteTodoController,
   postPhotoController
-} from '../todo/todo.controller';
-import { upload } from '../../configs/multer.config'
+} from '../todo/todo.controller.js';
+import { upload } from '../../configs/multer.config.js'
 
 const todoRouter = Router();
 
