@@ -1,6 +1,6 @@
 # Task Orchestration Framework
 
-## Summary & Purpose
+## Summary
 The Task Orchestration Framework is a modular backend application architected to manage and orchestrate tasks efficiently. Built to offer a robust and scalable architecture, it features various task-related operations including creation, cursor-based pagination, updates, photo uploads, and deletion. It also integrates Paystack for processing donations. The repository serves as a showcase of multiple stack combinations, maintaining several branches that demonstrate different database and feature integrations (MongoDB, PostgreSQL, Redis, Cloudinary), culminating in the main branch which utilizes Drizzle-ORM.
 
 ## Tech Stack
