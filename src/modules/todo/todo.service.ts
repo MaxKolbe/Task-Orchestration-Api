@@ -1,12 +1,12 @@
-import appdb from '../../configs/db.config';
-import redisClient from '../../configs/cache.config';
-import cloudinary from '../../configs/cloudinary.config';
+import appdb from '../../configs/db.config.js';
+import redisClient from '../../configs/cache.config.js';
+import cloudinary from '../../configs/cloudinary.config.js';
 import { Request } from 'express';
-import { todos } from './todo.schema';
+import { todos } from './todo.schema.js';
 import { sql, eq, asc } from 'drizzle-orm';
-import { Todo, Todoservicetype, Cursor } from '../../types/todo.d';
-import { encodeCursor, decodeCursor } from '../../utils/codec';
-import { delPattern } from '../../utils/delkeys';
+import { Todo, Todoservicetype, Cursor } from '../../types/todo.d.js';
+import { encodeCursor, decodeCursor } from '../../utils/codec.js';
+import { delPattern } from '../../utils/delkeys.js';
 
 export class Todoservice implements Todoservicetype<Todo> {
   constructor(private readonly newdb = appdb) {}
